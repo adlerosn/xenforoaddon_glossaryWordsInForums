@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<addon addon_id="glossaryWordsInForums" title="[kiror] Glossary" version_string="0.0" version_id="0" url="https://github.com/adlerosn/" install_callback_class="" install_callback_method="" uninstall_callback_class="" uninstall_callback_method="">
+  <admin_navigation/>
+  <admin_permissions/>
+  <admin_style_properties/>
+  <admin_templates>
+    <template title="kiror_option_template_glossary_definitions"><![CDATA[<xen:require js="js/xenforo/options_censor.js" />
+
+<xen:controlunit label="{$preparedOption.title}" hint="{$preparedOption.hint}">
+	<xen:explain>{xen:raw $preparedOption.explain}</xen:explain>
+	<xen:html>
+		<ul>
+			<xen:foreach loop="$choices" key="$counter" value="$choice">
+			<li>
+				<xen:textbox name="{$fieldPrefix}[{$preparedOption.option_id}][{$counter}][entry]" value="{$choice.entry}" placeholder="Glossary entry" size="20" />
+				<xen:textbox name="{$fieldPrefix}[{$preparedOption.option_id}][{$counter}][definition]" value="{$choice.definition}" placeholder="Definition (raw HTML, inside <span>)" size="60" />
+			</li>
+			</xen:foreach>
+		
+			<li class="CensorWordOptionListener">
+				<xen:textbox name="{$fieldPrefix}[{$preparedOption.option_id}][{$nextCounter}][entry]" value="" placeholder="Glossary entry" size="20" />
+				<xen:textbox name="{$fieldPrefix}[{$preparedOption.option_id}][{$nextCounter}][definition]" value="" placeholder="Definition (raw HTML, inside <span>)" size="60" />
+			</li>
+		</ul>
+		
+		<input type="hidden" name="{$listedFieldName}" value="{$preparedOption.option_id}" />
+		{xen:raw $editLink}
+	</xen:html>
+</xen:controlunit>]]></template>
+  </admin_templates>
+  <admin_template_modifications/>
+  <code_events/>
+  <code_event_listeners>
+    <listener event_id="load_class" execute_order="10" callback_class="glossaryWordsInForums_Extend" callback_method="callback" active="1" hint="XenForo_BbCode_Parser" description="Adds glossary to BBCode parser"/>
+    <listener event_id="navigation_tabs" execute_order="10" callback_class="glossaryWordsInForums_Navigation_Tabs" callback_method="callback" active="1" hint="" description="Glossary navigation tab"/>
+  </code_event_listeners>
+  <cron/>
+  <email_templates/>
+  <email_template_modifications/>
+  <optiongroups>
+    <group group_id="kiror_glossary_group" display_order="1" debug_only="0"/>
+    <option option_id="kiror_glossary_definitions" edit_format="callback" data_type="array" can_backup="1" validation_class="glossaryWordsInForums_Option_GlossaryDefinitions" validation_method="validate">
+      <default_value>a:0:{}</default_value>
+      <edit_format_params>glossaryWordsInForums_Option_GlossaryDefinitions::renderView</edit_format_params>
+      <sub_options>*</sub_options>
+      <relation group_id="kiror_glossary_group" display_order="20"/>
+    </option>
+    <option option_id="kiror_glossary_tab_position" edit_format="radio" data_type="string" can_backup="1">
+      <default_value>end</default_value>
+      <edit_format_params>home=Home
+middle=Middle
+end=End
+none=None</edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="kiror_glossary_group" display_order="10"/>
+    </option>
+  </optiongroups>
+  <permissions>
+    <permission_groups/>
+    <permissions/>
+    <interface_groups/>
+  </permissions>
+  <phrases>
+    <phrase title="custom_bb_code_glossary_desc" version_id="0" version_string="0.0"><![CDATA[Glossary entry]]></phrase>
+    <phrase title="custom_bb_code_glossary_title" global_cache="1" version_id="0" version_string="0.0"><![CDATA[Glossary]]></phrase>
+    <phrase title="glossary" version_id="0" version_string="0.0"><![CDATA[Glossary]]></phrase>
+    <phrase title="glossary_description" version_id="0" version_string="0.0"><![CDATA[The Glossary contains some terms that are commonly used in this community.]]></phrase>
+    <phrase title="glossary_synonymies" version_id="0" version_string="0.0"><![CDATA[Synonymies]]></phrase>
+    <phrase title="glossary_wrd_definition" version_id="0" version_string="0.0"><![CDATA[definition]]></phrase>
+    <phrase title="glossary_wrd_entry" version_id="0" version_string="0.0"><![CDATA[Entry]]></phrase>
+    <phrase title="option_group_kiror_glossary_group" version_id="0" version_string="0.0"><![CDATA[[kiror] Glossary]]></phrase>
+    <phrase title="option_group_kiror_glossary_group_description" version_id="0" version_string="0.0"><![CDATA[Group for editing glossary's behavior]]></phrase>
+    <phrase title="option_kiror_glossary_definitions" version_id="0" version_string="0.0"><![CDATA[Glossary definitions]]></phrase>
+    <phrase title="option_kiror_glossary_definitions_explain" version_id="0" version_string="0.0"><![CDATA[The Entries in the Glossary<br />
+Will be alphabetically sorted on save.]]></phrase>
+    <phrase title="option_kiror_glossary_tab_position" version_id="0" version_string="0.0"><![CDATA[Glossary Tab Position]]></phrase>
+    <phrase title="option_kiror_glossary_tab_position_explain" version_id="0" version_string="0.0"><![CDATA[Position of the tab among other tabs]]></phrase>
+    <phrase title="style_property_glossaryEntryHover_description_master" version_id="0" version_string="0.0"><![CDATA[How glossary entries will be displayed in the middle of the text.]]></phrase>
+    <phrase title="style_property_glossaryEntryHover_master" version_id="0" version_string="0.0"><![CDATA[Glossary entry, Hover State]]></phrase>
+    <phrase title="style_property_glossaryEntry_description_master" version_id="0" version_string="0.0"><![CDATA[How glossary entries will be displayed in the middle of the text.]]></phrase>
+    <phrase title="style_property_glossaryEntry_master" version_id="0" version_string="0.0"><![CDATA[Glossary entry]]></phrase>
+  </phrases>
+  <route_prefixes>
+    <route_type type="public">
+      <prefix original_prefix="glossary" class="glossaryWordsInForums_RoutePrefix_Glossary" build_link="data_only"/>
+    </route_type>
+  </route_prefixes>
+  <style_properties>
+    <property property_name="glossaryEntry" property_type="css" definition="1" group_name="general" title="Glossary entry" description="How glossary entries will be displayed in the middle of the text." css_components="text,extra" scalar_type="" scalar_parameters="" display_order="960" sub_group=""><![CDATA[{"color":"@primaryMedium","text-decoration":{"none":"none"}}]]></property>
+    <property property_name="glossaryEntryHover" property_type="css" definition="1" group_name="general" title="Glossary entry, Hover State" description="How glossary entries will be displayed in the middle of the text." css_components="text,extra" scalar_type="" scalar_parameters="" display_order="970" sub_group=""><![CDATA[{"text-decoration":{"underline":"underline"}}]]></property>
+  </style_properties>
+  <templates>
+    <template title="glossary.css" version_id="0" version_string="0.0"><![CDATA[table>*>tr>td{
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 5px;
+	padding-right: 5px;
+	border-color: {xen:property primaryLighter};
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+}
+table>*>tr>td>span.entryHead{
+	font-weight: bold;
+	font-size: 120%;
+}
+table>*>tr>td>span.entryTail{
+	font-size: 110%;
+	opacity: 0.75;
+}
+table>thead>tr>td{
+	border-bottom-style: none;
+	border-bottom-width: 0px;
+	background-color: {xen:property primaryDarker};
+	color: {xen:property primaryLighter};
+	border-radius: 2px;
+}]]></template>
+    <template title="glossary_entry" version_id="0" version_string="0.0"><![CDATA[<xen:title>{xen:phrase glossary}: {$entry}</xen:title>
+
+<xen:require css="glossary.css" />
+
+<div class="sectionMain" style="background-color: {xen:property pageBackground};">
+	<table>
+		<tbody>
+			<tr>
+				<td>
+<xen:foreach loop="$matches" value="$match" i="$i">
+	<p>{$i}. <i>{xen:raw $match.definition}</i></p>
+</xen:foreach>
+	<p>{xen:phrase glossary_synonymies}: {xen:raw $synonymsRawMerged}</p>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>]]></template>
+    <template title="glossary_list" version_id="0" version_string="0.0"><![CDATA[<xen:title>{xen:phrase glossary}</xen:title>
+<xen:description>{xen:phrase glossary_description}</xen:description>
+
+<xen:require css="glossary.css" />
+
+<div class="sectionMain" style="background-color: {xen:property pageBackground};">
+<table>
+<thead>
+	<tr><td><span class="entryHead">{xen:phrase glossary_wrd_entry}</span>: <span class="entryTail">{xen:phrase glossary_wrd_definition}</span></td></tr>
+</thead>
+<tbody>
+	<xen:foreach loop="$entries" value="$entry">
+	<tr><td>
+<span class="entryHead">{$entry.entry}</span>: {xen:raw $entry.synonyms}
+		<xen:foreach loop="$entry.definitions" value="$definition" i="$i">
+		<p>{$i}. <i><span class="entryTail">{xen:raw $definition}</span></i></p>
+		</xen:foreach>
+	</td></tr>
+	</xen:foreach>
+</tbody>
+</table>
+</div>]]></template>
+  </templates>
+  <public_template_modifications>
+    <modification template="xenforo.css" modification_key="addBBCodeRenderedGlossaryEntryStyle" description="Add BBCode-rendered Glossary entry style" execution_order="10" enabled="1" action="str_replace">
+      <find><![CDATA[<xen:hook name="xenforo_css_extra" />]]></find>
+      <replace><![CDATA[a.glossaryLink:link,
+a.glossaryLink:visited{
+	{xen:property glossaryEntry}
+}
+a.glossaryLink[href]:hover{
+	{xen:property glossaryEntryHover}
+}
+
+$0]]></replace>
+    </modification>
+  </public_template_modifications>
+  <bb_code_media_sites/>
+  <bb_codes>
+    <bb_code bb_code_id="glossary" bb_code_mode="callback" has_option="no" callback_class="glossaryWordsInForums_BBcode_Tag_Glossary" callback_method="callback" option_regex="" trim_lines_after="0" plain_children="0" disable_smilies="0" disable_nl2br="0" disable_autolink="0" allow_empty="0" allow_signature="1" editor_icon_url="" sprite_mode="0" active="1">
+      <replace_html><![CDATA[]]></replace_html>
+      <replace_html_email><![CDATA[]]></replace_html_email>
+      <replace_text><![CDATA[]]></replace_text>
+      <example><![CDATA[]]></example>
+    </bb_code>
+  </bb_codes>
+</addon>
